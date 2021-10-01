@@ -1,5 +1,5 @@
 import tkinter as tk
-from tkinter import Tk, ttk
+from tkinter import Label, PhotoImage, Tk, ttk
 from tkinter import messagebox as mess
 import tkinter.simpledialog as tsd
 import cv2,os
@@ -316,7 +316,10 @@ window.geometry("1080x620")
 window.resizable(True,False)
 window.title("Attendance System")
 window.configure(background='#262523')
-
+window.resizable(False,False)
+bg = PhotoImage(file = "C:/xampp/htdocs/attend - Copy/bg.png")
+label1 = Label( window, image = bg)
+label1.place(x = 0, y = 0)
 
 tklblusername = tk.Label(window, text="Enter Employee ID :", width=20, fg="black", height=1, font=('times', 15, ' bold '))
 tklblusername.place(x=20, y=210)
