@@ -321,33 +321,32 @@ bg = PhotoImage(file = "C:/xampp/htdocs/attend - Copy/bg.png")
 label1 = Label( window, image = bg)
 label1.place(x = 0, y = 0)
 
-tklblusername = tk.Label(window, text="Enter Employee ID :", width=20, fg="black", height=1, font=('times', 15, ' bold '))
-tklblusername.place(x=20, y=210)
+tklblusername = tk.Label(window, text="Enter Employee ID :", width=15, fg="black", height=1, font=('times', 15, ' bold '))
+tklblusername.place(x=150, y=215)
 
-tklblpassword = tk.Label(window, text="Enter Password    :", width=20, fg="black",  height=1, font=('times', 15, ' bold '))
-tklblpassword.place(x=20, y=310)
+tklblpassword = tk.Label(window, text="Enter Password    :", width=15, fg="black",  height=1, font=('times', 15, ' bold '))
+tklblpassword.place(x=150, y=320)
 
 tkusername = tk.Entry(window, width=20, bg="white", fg="red", font=('times', 25, ' bold '))
-tkusername.place(x=300, y=210)
+tkusername.place(x=400, y=210)
 
-tkpassword = tk.Entry(window, width=20, bg="yellow", fg="red", font=('times', 25, ' bold '))
-tkpassword.place(x=300, y=310)
+tkpassword = tk.Entry(window, width=20, bg="white", fg="red", font=('times', 25, ' bold '))
+tkpassword.place(x=400, y=310)
 
-tkclearusernamebtn = tk.Button(window, text="Clear", command=clearusername  ,fg="black"  ,bg="#ea2a2a"  ,width=11 ,activebackground = "white" ,font=('times', 11, ' bold '))
-tkclearusernamebtn.place(x=700, y=215)
-
-tkclearpasswordbtn = tk.Button(window, text="Clear", command=clearpassword  ,fg="black"  ,bg="#ea2a2a"  ,width=11 ,activebackground = "white" ,font=('times', 11, ' bold '))
-tkclearpasswordbtn.place(x=700, y=315)
+tkclearusernamebtn = tk.Button(window, text="X", command=clearusername  ,fg="red"  ,bg="white"  ,width=1 ,activebackground = "red" ,font=('times', 11, ' bold '))
+tkclearusernamebtn.place(x=720, y=215)
+tkclearusernamebtn = tk.Button(window, text="X", command=clearpassword  ,fg="red"  ,bg="white"  ,width=1 ,activebackground = "red" ,font=('times', 11, ' bold '))
+tkclearusernamebtn.place(x=720, y=315)
 
 
 tkfacultyloginbtn = tk.Button(window, text="Faculty", command=facultypanel  ,fg="black"  ,bg="#ea2a2a"  ,width=11 ,activebackground = "white" ,font=('times', 11, ' bold '))
-tkfacultyloginbtn.place(x=500, y=415)
+tkfacultyloginbtn.place(x=600, y=415)
 
 tkadminloginbtn = tk.Button(window, text="Admin", command=adminpanel  ,fg="black"  ,bg="#ea2a2a"  ,width=11 ,activebackground = "white" ,font=('times', 11, ' bold '))
-tkadminloginbtn.place(x=350, y=415)
+tkadminloginbtn.place(x=450, y=415)
 
-tklblerror = tk.Label(window, text="",bg="#262523", width=80, fg="red",  height=1, font=('times', 15, ' bold '))
-tklblerror.place(x=5, y=495)
+tklblerror = tk.Label(window, text="", width=90, fg="red",  height=1, font=('times', 15, ' bold '))
+tklblerror.place(x=0, y=495)
 
 
 
