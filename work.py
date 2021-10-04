@@ -151,21 +151,29 @@ def adminpanel():
     if(tkpassword.get()=="" or tkusername.get()=="" ):
         tklblerror.config(text="Enter Credentials!")
         print("Admin Credentials not entered to login")
-    elif(tkpassword.get()=="admin" and tkusername.get()=="admin"):
+    elif(tkpassword.get()=="a" and tkusername.get()=="a"):
+        window.destroy()
         admin=tk.Tk()
-        admin.geometry("1080x620")
-        admin.resizable(True,False)
+        admin.geometry("950x620")
+        admin.resizable(False,False)
+        bg = PhotoImage(file = "C:/xampp/htdocs/attend - Copy/bg.png")
+        label1 = Label( admin, image = bg)
+        label1.place(x = 0, y = 0)
         admin.title("ADMIN PANEL")
         admin.configure(background='#262523')
-        window.destroy()
+        tklblstuser = tk.Label(admin, text="Enter Student ID   :", width=15, fg="black", height=1, font=('times', 15, ' bold '))
+        tklblstuser.place(x=50, y=215)
+        tklblstpass = tk.Label(admin, text="Enter Student Name :", width=15, fg="black", height=1, font=('times', 15, ' bold '))
+        tklblstpass.place(x=50, y=315)
+
         adminpanel.txt = tk.Entry(admin,width=32 ,fg="black",font=('times', 15, ' bold '))
-        adminpanel.txt.place(x=30, y=88)
+        adminpanel.txt.place(x=300, y=215)
         adminpanel.txt2 = tk.Entry(admin,width=32 ,fg="black",font=('times', 15, ' bold ')  )
-        adminpanel.txt2.place(x=30, y=173)
+        adminpanel.txt2.place(x=300, y=315)
         tknewregistrationbtn = tk.Button(admin, text="Take Images",command=TakeImages,fg="black"  ,bg="#ea2a2a"  ,width=11 ,activebackground = "white" ,font=('times', 11, ' bold '))
-        tknewregistrationbtn.place(x=700, y=315)
+        tknewregistrationbtn.place(x=700, y=215)
         tksavebtn = tk.Button(admin, text="Save Profile",command=TrainImages,fg="black"  ,bg="#ea2a2a"  ,width=11 ,activebackground = "white" ,font=('times', 11, ' bold '))
-        tksavebtn.place(x=700, y=415)
+        tksavebtn.place(x=700, y=315)
         adminpanel.message = tk.Label(admin, text="" ,bg="#00aeff" ,fg="black"  ,width=39,height=1, activebackground = "yellow" ,font=('times', 16, ' bold '))
         adminpanel.message.place(x=7, y=450)
         adminpanel.message1 = tk.Label(admin, text="" ,bg="#00aeff" ,fg="black"  ,width=39,height=1, activebackground = "yellow" ,font=('times', 16, ' bold '))
@@ -312,7 +320,7 @@ def clearpassword():
 
 
 window = tk.Tk()
-window.geometry("1080x620")
+window.geometry("950x620")
 window.resizable(True,False)
 window.title("Attendance System")
 window.configure(background='#262523')
@@ -340,10 +348,10 @@ tkclearusernamebtn.place(x=720, y=315)
 
 
 tkfacultyloginbtn = tk.Button(window, text="Faculty", command=facultypanel  ,fg="black"  ,bg="#ea2a2a"  ,width=11 ,activebackground = "white" ,font=('times', 11, ' bold '))
-tkfacultyloginbtn.place(x=600, y=415)
+tkfacultyloginbtn.place(x=585, y=415)
 
 tkadminloginbtn = tk.Button(window, text="Admin", command=adminpanel  ,fg="black"  ,bg="#ea2a2a"  ,width=11 ,activebackground = "white" ,font=('times', 11, ' bold '))
-tkadminloginbtn.place(x=450, y=415)
+tkadminloginbtn.place(x=435, y=415)
 
 tklblerror = tk.Label(window, text="", width=90, fg="red",  height=1, font=('times', 15, ' bold '))
 tklblerror.place(x=0, y=495)
