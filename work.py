@@ -92,27 +92,20 @@ def TrainImages():
 
 def TakeImages():
     check_haarcascadefile()
-    columns = ['SERIAL NO.','Student ID','Student NAME']
+    columns = ['Student ID']
     assure_path_exists("StudentDetails/")
     assure_path_exists("TrainingImage/")
     serial = 0
     exists = os.path.isfile("StudentDetails\StudentDetails.csv")
-    if exists:
-        with open("StudentDetails\StudentDetails.csv", 'r') as csvFile1:
-            reader1 = csv.reader(csvFile1)
-            for l in reader1:
-                serial = serial + 1
-        serial = (serial // 2)
-        csvFile1.close()
-    else:
-        with open("StudentDetails\StudentDetails.csv", 'a+') as csvFile1:
+
+    if (exists==False):
+        with open("StudentDetails\StudentDetails.csv", 'a+',newline="") as csvFile1:
             writer = csv.writer(csvFile1)
             writer.writerow(columns)
-            serial = 1
-        csvFile1.close()
-    Id = (adminpanel.txt.get())
-    name = (adminpanel.txt2.get())
-    if ((name.isalpha()) or (' ' in name)):
+        csvFile1.close()   
+        
+    Id = (adminpanel.studentid.get())
+    if (Id!=''):
         cam = cv2.VideoCapture(0)
         harcascadePath = "haarcascade_frontalface_default.xml"
         detector = cv2.CascadeClassifier(harcascadePath)
@@ -126,7 +119,7 @@ def TakeImages():
                 # incrementing sample number
                 sampleNum = sampleNum + 1
                 # saving the captured face in the dataset folder TrainingImage
-                cv2.imwrite("TrainingImage\ " +str(serial) + "." + Id + '.' + str(sampleNum) + ".jpg",gray[y:y + h, x:x + w])
+                cv2.imwrite("TrainingImage\ "+ Id + '.' + str(sampleNum) + ".jpg",gray[y:y + h, x:x + w])
                 # display the frame
                 cv2.imshow('Taking Images', img)
             # wait for 100 miliseconds
@@ -138,16 +131,15 @@ def TakeImages():
         cam.release()
         cv2.destroyAllWindows()
         res = "Images Taken for ID : " + Id
-        row = [serial, Id, name]
-        with open('StudentDetails\StudentDetails.csv', 'a+') as csvFile:
+        row = [Id]
+        with open('StudentDetails\StudentDetails.csv', 'a+',newline="") as csvFile:
             writer = csv.writer(csvFile)
             writer.writerow(row)
         csvFile.close()
         adminpanel.message.configure(text=res)
     else:
-        if (name.isalpha() == False):
-            res = "Enter Correct name"
-            adminpanel.message.configure(text=res)
+        res = "Enter Correct Student ID!"
+        adminpanel.message.configure(text=res)
 
 def adminpanel():
     if(tkpassword.get()=="" or tkusername.get()=="" ):
@@ -165,13 +157,13 @@ def adminpanel():
         admin.configure(background='#262523')
         tklblstuser = tk.Label(admin, text="Enter Student ID   :", width=15, fg="black", height=1, font=('times', 15, ' bold '))
         tklblstuser.place(x=50, y=215)
-        tklblstpass = tk.Label(admin, text="Enter Student Name :", width=15, fg="black", height=1, font=('times', 15, ' bold '))
-        tklblstpass.place(x=50, y=315)
+        #tklblstpass = tk.Label(admin, text="Enter Student Name :", width=15, fg="black", height=1, font=('times', 15, ' bold '))
+        #tklblstpass.place(x=50, y=315)
 
-        adminpanel.txt = tk.Entry(admin,width=32 ,fg="black",font=('times', 15, ' bold '))
-        adminpanel.txt.place(x=300, y=215)
-        adminpanel.txt2 = tk.Entry(admin,width=32 ,fg="black",font=('times', 15, ' bold ')  )
-        adminpanel.txt2.place(x=300, y=315)
+        adminpanel.studentid = tk.Entry(admin,width=32 ,fg="black",font=('times', 15, ' bold '))
+        adminpanel.studentid.place(x=300, y=215)
+        #adminpanel.txt2 = tk.Entry(admin,width=32 ,fg="black",font=('times', 15, ' bold ')  )
+        #adminpanel.txt2.place(x=300, y=315)
         tknewregistrationbtn = tk.Button(admin, text="Take Images",command=TakeImages,fg="black"  ,bg="#ea2a2a"  ,width=11 ,activebackground = "white" ,font=('times', 11, ' bold '))
         tknewregistrationbtn.place(x=700, y=215)
         tksavebtn = tk.Button(admin, text="Save Profile",command=TrainImages,fg="black"  ,bg="#ea2a2a"  ,width=11 ,activebackground = "white" ,font=('times', 11, ' bold '))
