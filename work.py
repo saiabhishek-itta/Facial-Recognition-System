@@ -60,7 +60,10 @@ def getImagesAndLabels(path):
         # Now we are converting the PIL image into numpy array
         imageNp = np.array(pilImage, 'uint8')
         # getting the Id from the image
-        ID = int(os.path.split(imagePath)[-1].split(".")[1])
+        print(imagePath)
+        print(os.path.split(imagePath)[-1])
+        print(os.path.split(imagePath)[-1].split(".")[0])
+        ID = int(os.path.split(imagePath)[-1].split(".")[0])
         # extract the face from the training image sample
         faces.append(imageNp)
         Ids.append(ID)
@@ -77,13 +80,13 @@ def TrainImages():
         recognizer.train(faces, np.array(ID))
         print(ID)
     except:
-        #mess._show(title='No New Images Found', message='Please Take Images to proceed with profile saving!')
-        adminpanel.message.configure(text='Please take images first!!!')
+        #mess._show(title='No New Images Found', message='')
+        adminpanel.message.configure(text='Please Take Images to proceed with profile saving!')
         return
     recognizer.save("TrainingImageLabel\Trainner.yml")
     res = "Profile Saved Successfully"
     adminpanel.message1.configure(text=res)
-    adminpanel.message.configure(text='Total Registrations till now  : ' + str(ID[0]))
+    adminpanel.message.configure(text='Total Registrations till now  : ' + str(ID[-1]))
 
 
 
@@ -123,8 +126,7 @@ def TakeImages():
                 # incrementing sample number
                 sampleNum = sampleNum + 1
                 # saving the captured face in the dataset folder TrainingImage
-                cv2.imwrite("TrainingImage\ " + name + "." + str(serial) + "." + Id + '.' + str(sampleNum) + ".jpg",
-                            gray[y:y + h, x:x + w])
+                cv2.imwrite("TrainingImage\ " +str(serial) + "." + Id + '.' + str(sampleNum) + ".jpg",gray[y:y + h, x:x + w])
                 # display the frame
                 cv2.imshow('Taking Images', img)
             # wait for 100 miliseconds
