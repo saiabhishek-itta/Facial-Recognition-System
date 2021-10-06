@@ -188,29 +188,33 @@ def facultypanel():
     if(tkpassword.get()=="" or tkusername.get()=="" ):
         tklblerror.config(text="Enter Credentials!")
         print("Faculty Credentials not entered to login")
-    elif(tkpassword.get()=="faculty" and tkusername.get()=="faculty"):
+    elif(tkpassword.get()=="f" and tkusername.get()=="f"):
+        window.destroy()
         admin=tk.Tk()
-        admin.geometry("1080x620")
-        admin.resizable(True,False)
+        admin.geometry("950x620")
+        admin.resizable(False,False)
+        bg = PhotoImage(file = "C:/xampp/htdocs/attend - Copy/bg.png")
+        label1 = Label( admin, image = bg)
+        label1.place(x = 0, y = 0)
         admin.title("FACULTY PANEL")
         admin.configure(background='#262523')
-        facultypanel.tv= ttk.Treeview(admin,height =13,columns = ('name','date','time'))
+        facultypanel.tv= ttk.Treeview(admin,height =13,columns = ('date','time'))
         facultypanel.tv.column('#0',width=82)
-        facultypanel.tv.column('name',width=130)
+        #facultypanel.tv.place(x=300,y=100)
+        #facultypanel.tv.column('name',width=130)
         facultypanel.tv.column('date',width=133)
         facultypanel.tv.column('time',width=133)
-        facultypanel.tv.grid(row=2,column=0,padx=(0,0),pady=(150,0),columnspan=4)
+        facultypanel.tv.grid(row=2,column=0,padx=(20,20),pady=(150,0),columnspan=4)
         facultypanel.tv.heading('#0',text ='ID')
-        facultypanel.tv.heading('name',text ='NAME')
+        #facultypanel.tv.heading('name',text ='NAME')
         facultypanel.tv.heading('date',text ='DATE')
         facultypanel.tv.heading('time',text ='TIME')
         facultypanel.tkslot = tk.Entry(admin,width=32 ,fg="black",font=('times', 15, ' bold ')  )
         facultypanel.tkslot.place(x=600, y=173)
         tknewregistrationbtn = tk.Button(admin, text="Take Attendence",command=TrackImages,fg="black"  ,bg="#ea2a2a"  ,width=11 ,activebackground = "white" ,font=('times', 11, ' bold '))
         tknewregistrationbtn.place(x=700, y=315)
-        facultypanel.fperror = tk.Label(admin, text="error!",bg="#262523", width=80, fg="red",  height=1, font=('times', 15, ' bold '))
-        facultypanel.fperror.place(x=300, y=415)
-        window.destroy()
+        facultypanel.fperror = tk.Label(admin, text="error!",bg="white", width=80, fg="red",  height=1, font=('times', 15, ' bold '))
+        facultypanel.fperror.place(x=0, y=515)
         admin.mainloop()
     else:
         tklblerror.config(text="ID or Password not found for Faculty")
@@ -234,19 +238,19 @@ def TrackImages():
         if exists3:
             recognizer.read("TrainingImageLabel\Trainner.yml")
         else:
-            mess._show(title='Data Missing', message='Please click on Save Profile to reset data!!')
+            mess._show(title='.yml file not found ', message='Please contact admin.')
             return
         harcascadePath = "haarcascade_frontalface_default.xml"
         faceCascade = cv2.CascadeClassifier(harcascadePath)
 
         cam = cv2.VideoCapture(0)
         font = cv2.FONT_HERSHEY_SIMPLEX
-        col_names = ['Id', 'Name', 'Date', 'Time']
+        col_names = ['Id','Date', 'Time']
         exists1 = os.path.isfile("StudentDetails\StudentDetails.csv")
         if exists1:
             df = pd.read_csv("StudentDetails\StudentDetails.csv")
         else:
-            mess._show(title='Details Missing', message='Students details are missing, please check!')
+            mess._show(title='Student Details Missing in csv format', message='Students details are missing, please check!')
             cam.release()
             cv2.destroyAllWindows()
             window.destroy()
@@ -257,21 +261,23 @@ def TrackImages():
             for (x, y, w, h) in faces:
                 cv2.rectangle(im, (x, y), (x + w, y + h), (225, 0, 0), 2)
                 serial, conf = recognizer.predict(gray[y:y + h, x:x + w])
+                print(serial)
+                Id = 'Unknown'
                 if (conf < 50):
                     ts = time.time()
                     date = datetime.datetime.fromtimestamp(ts).strftime('%d-%m-%Y')
                     timeStamp = datetime.datetime.fromtimestamp(ts).strftime('%H:%M:%S')
-                    aa = df.loc[df['SERIAL NO.'] == serial]['NAME'].values
-                    ID = df.loc[df['SERIAL NO.'] == serial]['ID'].values
+                    #aa = df.loc[df['SERIAL NO.'] == serial]['NAME'].values
+                    ID = df.loc[df['Student ID'] == serial].values
                     ID = str(ID)
-                    ID = ID[1:-1]
-                    bb = str(aa)
-                    bb = bb[2:-2]
-                    attendance = [str(ID), bb, str(date), str(timeStamp)]
-
+                    ID = ID[2:-2]
+                    #bb = str(aa)
+                    #bb = bb[2:-2]
+                    attendance = [str(ID), str(date), str(timeStamp)]
+                    Id = ID
                 else:
                     Id = 'Unknown'
-                    bb = str(Id)
+                bb = str(Id)
                 cv2.putText(im, str(bb), (x, y + h), font, 1, (255, 255, 255), 2)
             cv2.imshow('Taking Attendance', im)
             if (cv2.waitKey(1) == ord('q')):
@@ -293,11 +299,12 @@ def TrackImages():
         with open("Attendance\Attendance_" +facultypanel.tkslot.get()+"_"+ date + ".csv", 'r') as csvFile1:
             reader1 = csv.reader(csvFile1)
             for lines in reader1:
+                print(lines)
                 i = i + 1
                 if (i > 1):
                     if (i % 2 != 0):
                         iidd = str(lines[0]) + '   '
-                        facultypanel.tv.insert('', 0, text=iidd, values=(str(lines[1]), str(lines[2]), str(lines[3])))
+                        facultypanel.tv.insert('', 0, text=iidd, values=( str(lines[1]), str(lines[2])))
         csvFile1.close()
         cam.release()
         cv2.destroyAllWindows()
@@ -311,6 +318,10 @@ def clearusername():
     tkusername.delete(first=0,last=10)
 def clearpassword():
     tkpassword.delete(first=0,last=18)
+def tick():
+    time_string = time.strftime('%H:%M:%S')
+    clock.config(text=time_string)
+    clock.after(200,tick)
 
 
 window = tk.Tk()
@@ -322,6 +333,12 @@ window.resizable(False,False)
 bg = PhotoImage(file = "C:/xampp/htdocs/attend - Copy/bg.png")
 label1 = Label( window, image = bg)
 label1.place(x = 0, y = 0)
+
+datef = tk.Label(window, text = day+"-"+mont[month]+"-"+year, fg="orange",bg="white" ,width=57 ,height=1,font=('times', 22, ' bold '))
+datef.place(x=0,y=100)
+clock = tk.Label(window,fg="orange",bg="white" ,width=57 ,height=1,font=('times', 22, ' bold '))
+clock.place(x=0,y=140)
+tick()
 
 tklblusername = tk.Label(window, text="Enter Employee ID :", width=15, fg="black", height=1, font=('times', 15, ' bold '))
 tklblusername.place(x=150, y=215)
