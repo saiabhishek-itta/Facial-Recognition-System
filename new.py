@@ -264,7 +264,7 @@ def TrackImages():
         mess._show(title='Data Missing', message='Please click on Save Profile to reset data!!')
         return
     harcascadePath = "haarcascade_frontalface_default.xml"
-    faceCascade = cv2.CascadeClassifier(harcascadePath)
+    faceCascade = cv2.CascadeClassifier(harcascadePath);
 
     cam = cv2.VideoCapture(0)
     font = cv2.FONT_HERSHEY_SIMPLEX
@@ -277,6 +277,7 @@ def TrackImages():
         cam.release()
         cv2.destroyAllWindows()
         window.destroy()
+    nameList=[]
     while True:
         ret, im = cam.read()
         gray = cv2.cvtColor(im, cv2.COLOR_BGR2GRAY)
@@ -294,8 +295,24 @@ def TrackImages():
                 ID = ID[1:-1]
                 bb = str(aa)
                 bb = bb[2:-2]
-                attendance = [str(ID), '', bb, '', str(date), '', str(timeStamp)]
 
+                if str(ID) not in nameList:
+                    nameList.append(str(ID))
+                    attendance = [str(ID), '', bb, '', str(date), '', str(timeStamp)]
+                    ts = time.time()
+                    date = datetime.datetime.fromtimestamp(ts).strftime('%d-%m-%Y')
+                    exists = os.path.isfile("Attendance\Attendance_" + date + ".csv")
+                    if exists:
+                        with open("Attendance\Attendance_" + date + ".csv", 'a+') as csvFile1:
+                            writer = csv.writer(csvFile1)
+                            writer.writerow(attendance)
+                        csvFile1.close()
+                    else:
+                        with open("Attendance\Attendance_" + date + ".csv", 'a+') as csvFile1:
+                            writer = csv.writer(csvFile1)
+                            writer.writerow(col_names)
+                            writer.writerow(attendance)
+                        csvFile1.close()
             else:
                 Id = 'Unknown'
                 bb = str(Id)
@@ -303,20 +320,6 @@ def TrackImages():
         cv2.imshow('Taking Attendance', im)
         if (cv2.waitKey(1) == ord('q')):
             break
-    ts = time.time()
-    date = datetime.datetime.fromtimestamp(ts).strftime('%d-%m-%Y')
-    exists = os.path.isfile("Attendance\Attendance_" + date + ".csv")
-    if exists:
-        with open("Attendance\Attendance_" + date + ".csv", 'a+') as csvFile1:
-            writer = csv.writer(csvFile1)
-            writer.writerow(attendance)
-        csvFile1.close()
-    else:
-        with open("Attendance\Attendance_" + date + ".csv", 'a+') as csvFile1:
-            writer = csv.writer(csvFile1)
-            writer.writerow(col_names)
-            writer.writerow(attendance)
-        csvFile1.close()
     with open("Attendance\Attendance_" + date + ".csv", 'r') as csvFile1:
         reader1 = csv.reader(csvFile1)
         for lines in reader1:

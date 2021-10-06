@@ -254,6 +254,7 @@ def TrackImages():
             cam.release()
             cv2.destroyAllWindows()
             window.destroy()
+        nameList=[]    
         while True:
             ret, im = cam.read()
             gray = cv2.cvtColor(im, cv2.COLOR_BGR2GRAY)
@@ -261,8 +262,7 @@ def TrackImages():
             for (x, y, w, h) in faces:
                 cv2.rectangle(im, (x, y), (x + w, y + h), (225, 0, 0), 2)
                 serial, conf = recognizer.predict(gray[y:y + h, x:x + w])
-                print(serial)
-                Id = 'Unknown'
+                #print(serial)
                 if (conf < 50):
                     ts = time.time()
                     date = datetime.datetime.fromtimestamp(ts).strftime('%d-%m-%Y')
@@ -271,31 +271,30 @@ def TrackImages():
                     ID = df.loc[df['Student ID'] == serial].values
                     ID = str(ID)
                     ID = ID[2:-2]
-                    #bb = str(aa)
-                    #bb = bb[2:-2]
-                    attendance = [str(ID), str(date), str(timeStamp)]
-                    Id = ID
+                    if str(ID) not in nameList:
+                        nameList.append(str(ID))
+                        attendance = [str(ID), str(date), str(timeStamp)]
+                        ts = time.time()
+                        date = datetime.datetime.fromtimestamp(ts).strftime('%d-%m-%Y')
+                        exists = os.path.isfile("Attendance\Attendance_"+facultypanel.tkslot.get()+"_"+ date + ".csv")
+                        if exists:
+                            with open("Attendance\Attendance_"+facultypanel.tkslot.get()+"_"+ date + ".csv", 'a+') as csvFile1:
+                                writer = csv.writer(csvFile1)
+                                writer.writerow(attendance)
+                            csvFile1.close()
+                        else:
+                            with open("Attendance\Attendance_" +facultypanel.tkslot.get()+"_"+ date + ".csv", 'a+') as csvFile1:
+                                writer = csv.writer(csvFile1)
+                                writer.writerow(col_names)
+                                writer.writerow(attendance)
+                            csvFile1.close()
                 else:
-                    Id = 'Unknown'
-                bb = str(Id)
-                cv2.putText(im, str(bb), (x, y + h), font, 1, (255, 255, 255), 2)
+                    ID = 'Unknown'
+                cv2.putText(im, ID, (x, y + h), font, 1, (255, 255, 255), 2)
             cv2.imshow('Taking Attendance', im)
             if (cv2.waitKey(1) == ord('q')):
                 break
-        ts = time.time()
-        date = datetime.datetime.fromtimestamp(ts).strftime('%d-%m-%Y')
-        exists = os.path.isfile("Attendance\Attendance_"+facultypanel.tkslot.get()+"_"+ date + ".csv")
-        if exists:
-            with open("Attendance\Attendance_"+facultypanel.tkslot.get()+"_"+ date + ".csv", 'a+') as csvFile1:
-                writer = csv.writer(csvFile1)
-                writer.writerow(attendance)
-            csvFile1.close()
-        else:
-            with open("Attendance\Attendance_" +facultypanel.tkslot.get()+"_"+ date + ".csv", 'a+') as csvFile1:
-                writer = csv.writer(csvFile1)
-                writer.writerow(col_names)
-                writer.writerow(attendance)
-            csvFile1.close()
+        
         with open("Attendance\Attendance_" +facultypanel.tkslot.get()+"_"+ date + ".csv", 'r') as csvFile1:
             reader1 = csv.reader(csvFile1)
             for lines in reader1:
