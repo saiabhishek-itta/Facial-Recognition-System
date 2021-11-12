@@ -189,6 +189,7 @@ def facultypanel():
         tklblerror.config(text="Enter Credentials!")
         print("Faculty Credentials not entered to login")
     elif(tkpassword.get()=="f" and tkusername.get()=="f"):
+        facultypanel.facultyid=tkusername.get()
         window.destroy()
         admin=tk.Tk()
         admin.geometry("950x620")
@@ -205,7 +206,7 @@ def facultypanel():
         facultypanel.tv.column('date',width=133)
         facultypanel.tv.column('time',width=133)
         facultypanel.tv.grid(row=2,column=0,padx=(20,20),pady=(150,0),columnspan=4)
-        facultypanel.tv.heading('#0',text ='ID')
+        facultypanel.tv.heading('#0',text ='STUDENT ID')
         #facultypanel.tv.heading('name',text ='NAME')
         facultypanel.tv.heading('date',text ='DATE')
         facultypanel.tv.heading('time',text ='TIME')
@@ -215,17 +216,26 @@ def facultypanel():
         facultypanel.slotlbl.place(x=450, y=173)
         tknewregistrationbtn = tk.Button(admin, text="Take Attendence",command=TrackImages,fg="black"  ,bg="#ea2a2a"  ,width=14 ,activebackground = "white" ,font=('times', 11, ' bold '))
         tknewregistrationbtn.place(x=450, y=315)
-        tkeditbtn = tk.Button(admin, text="Edit Attendence",command=TrackImages,fg="black"  ,bg="#ea2a2a"  ,width=14 ,activebackground = "white" ,font=('times', 11, ' bold '))
+        tkeditbtn = tk.Button(admin, text="Edit Attendence",command=EditAttendance,fg="black"  ,bg="#ea2a2a"  ,width=14 ,activebackground = "white" ,font=('times', 11, ' bold '))
         tkeditbtn.place(x=610, y=315)
         tkpostbtn = tk.Button(admin, text="Post Attendence",command=TrackImages,fg="black"  ,bg="#ea2a2a"  ,width=14 ,activebackground = "white" ,font=('times', 11, ' bold '))
         tkpostbtn.place(x=770, y=315)
-        facultypanel.fperror = tk.Label(admin, text="error!",bg="white", width=80, fg="red",  height=1, font=('times', 15, ' bold '))
+        facultypanel.fperror = tk.Label(admin, text="",bg="white", width=80, fg="red",  height=1, font=('times', 15, ' bold '))
         facultypanel.fperror.place(x=0, y=515)
         admin.mainloop()
     else:
         tklblerror.config(text="ID or Password not found for Faculty")
         print("Faculty login failed")
-
+def EditAttendance():
+    if(facultypanel.tkslot.get()==""):
+        facultypanel.fperror.config(text="Enter Slot!")
+    else:
+        attexists = os.path.isfile("C:\\xampp\\htdocs\\attend - Copy\\Attendance\\Attendance_"+facultypanel.facultyid+"_"+facultypanel.tkslot.get()+"_"+"12-11-2021"+".csv")
+        if(attexists):
+         os.startfile("C:\\xampp\\htdocs\\attend - Copy\\Attendance\\Attendance_"+facultypanel.facultyid+"_"+facultypanel.tkslot.get()+"_"+"12-11-2021"+".csv")
+         facultypanel.fperror.config(text="")
+        else:
+            facultypanel.fperror.config(text="Slot Not Found!")
 def TrackImages():
     if(facultypanel.tkslot.get()==""):
         facultypanel.fperror.config(text="Enter Slot!")
@@ -282,14 +292,14 @@ def TrackImages():
                         attendance = [str(ID), str(date), str(timeStamp)]
                         ts = time.time()
                         date = datetime.datetime.fromtimestamp(ts).strftime('%d-%m-%Y')
-                        exists = os.path.isfile("Attendance\Attendance_"+facultypanel.tkslot.get()+"_"+ date + ".csv")
+                        exists = os.path.isfile("Attendance\Attendance_"+facultypanel.facultyid+"_"+facultypanel.tkslot.get()+"_"+ date + ".csv")
                         if exists:
-                            with open("Attendance\Attendance_"+facultypanel.tkslot.get()+"_"+ date + ".csv", 'a+') as csvFile1:
+                            with open("Attendance\Attendance_"+facultypanel.facultyid+"_"+facultypanel.tkslot.get()+"_"+ date + ".csv", 'a+') as csvFile1:
                                 writer = csv.writer(csvFile1)
                                 writer.writerow(attendance)
                             csvFile1.close()
                         else:
-                            with open("Attendance\Attendance_" +facultypanel.tkslot.get()+"_"+ date + ".csv", 'a+') as csvFile1:
+                            with open("Attendance\Attendance_"+facultypanel.facultyid+"_"+facultypanel.tkslot.get()+"_"+ date + ".csv", 'a+') as csvFile1:
                                 writer = csv.writer(csvFile1)
                                 writer.writerow(col_names)
                                 writer.writerow(attendance)
@@ -301,7 +311,7 @@ def TrackImages():
             if (cv2.waitKey(1) == ord('q')):
                 break
         
-        with open("Attendance\Attendance_" +facultypanel.tkslot.get()+"_"+ date + ".csv", 'r') as csvFile1:
+        with open("Attendance\Attendance_"+facultypanel.facultyid+"_"+facultypanel.tkslot.get()+"_"+ date + ".csv", 'r') as csvFile1:
             reader1 = csv.reader(csvFile1)
             for lines in reader1:
                 print(lines)
