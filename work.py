@@ -9,7 +9,7 @@ from PIL import Image
 import pandas as pd
 import datetime
 import time
-
+import os, glob
 global key
 key = ''
 
@@ -160,22 +160,40 @@ def adminpanel():
         #tklblstpass = tk.Label(admin, text="Enter Student Name :", width=15, fg="black", height=1, font=('times', 15, ' bold '))
         #tklblstpass.place(x=50, y=315)
 
-        adminpanel.studentid = tk.Entry(admin,width=32 ,fg="black",font=('times', 15, ' bold '))
-        adminpanel.studentid.place(x=300, y=215)
+        adminpanel.studentid = tk.Entry(admin,width=30 ,fg="black",font=('times', 15, ' bold '))
+        adminpanel.studentid.place(x=250, y=215)
         #adminpanel.txt2 = tk.Entry(admin,width=32 ,fg="black",font=('times', 15, ' bold ')  )
         #adminpanel.txt2.place(x=300, y=315)
         tknewregistrationbtn = tk.Button(admin, text="Take Images",command=TakeImages,fg="black"  ,bg="#ea2a2a"  ,width=11 ,activebackground = "white" ,font=('times', 11, ' bold '))
-        tknewregistrationbtn.place(x=700, y=215)
+        tknewregistrationbtn.place(x=50, y=315)
         tksavebtn = tk.Button(admin, text="Save Profile",command=TrainImages,fg="black"  ,bg="#ea2a2a"  ,width=11 ,activebackground = "white" ,font=('times', 11, ' bold '))
-        tksavebtn.place(x=700, y=315)
-        adminpanel.message = tk.Label(admin, text="" ,bg="#00aeff" ,fg="black"  ,width=39,height=1, activebackground = "yellow" ,font=('times', 16, ' bold '))
-        adminpanel.message.place(x=7, y=450)
-        adminpanel.message1 = tk.Label(admin, text="" ,bg="#00aeff" ,fg="black"  ,width=39,height=1, activebackground = "yellow" ,font=('times', 16, ' bold '))
-        adminpanel.message1.place(x=7, y=550)
+        tksavebtn.place(x=250, y=315)
+        tkdeletebtn = tk.Button(admin, text="Delete Profile",command=deleteprofile,fg="black"  ,bg="#ea2a2a"  ,width=11 ,activebackground = "white" ,font=('times', 11, ' bold '))
+        tkdeletebtn.place(x=450, y=315)
+        tkdviewstdsbtn = tk.Button(admin, text="View Registrations",command=viewregistrations,fg="black"  ,bg="#ea2a2a"  ,width=20 ,activebackground = "white" ,font=('times', 11, ' bold '))
+        tkdviewstdsbtn.place(x=650, y=215)
+        tkviewimagesbtn = tk.Button(admin, text="View Images",command=viewimages,fg="black"  ,bg="#ea2a2a"  ,width=20 ,activebackground = "white" ,font=('times', 11, ' bold '))
+        tkviewimagesbtn.place(x=650, y=315)
+        adminpanel.message = tk.Label(admin, text="" ,bg="#00aeff" ,fg="black"  ,width=100,height=1, activebackground = "yellow" ,font=('times', 16, ' bold '))
+        adminpanel.message.place(x=0, y=500)
+        adminpanel.message1 = tk.Label(admin, text="" ,bg="#00aeff" ,fg="black"  ,width=100,height=1, activebackground = "yellow" ,font=('times', 16, ' bold '))
+        adminpanel.message1.place(x=0, y=550)
         admin.mainloop()
     else:
         tklblerror.config(text="ID or Password not found for Admin")
         print("Admin login failed")
+
+def viewregistrations():
+    os.startfile("C:\\xampp\\htdocs\\attend - Copy\\StudentDetails\\StudentDetails.csv")
+def viewimages():
+    os.startfile("C:\\xampp\\htdocs\\attend - Copy\\TrainingImage")
+def deleteprofile():
+    if(adminpanel.studentid.get()==""):
+        adminpanel.message1.config(text="Enter Student ID to Delete Profile")
+    else:
+        for filename in glob.glob("C:/xampp/htdocs/attend - Copy/TrainingImage/ "+adminpanel.studentid.get()+"*.jpg"):
+         os.remove(filename)
+
 
 
 
