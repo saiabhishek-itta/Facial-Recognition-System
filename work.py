@@ -1,3 +1,4 @@
+from io import FileIO
 import tkinter as tk
 from tkinter import Label, PhotoImage, Tk, ttk
 from tkinter import messagebox as mess
@@ -10,6 +11,8 @@ import pandas as pd
 import datetime
 import time
 import os, glob
+import mysql.connector
+import MySQLdb
 global key
 key = ''
 
@@ -174,9 +177,9 @@ def adminpanel():
         tkdviewstdsbtn.place(x=650, y=215)
         tkviewimagesbtn = tk.Button(admin, text="View Images",command=viewimages,fg="black"  ,bg="#ea2a2a"  ,width=20 ,activebackground = "white" ,font=('times', 11, ' bold '))
         tkviewimagesbtn.place(x=650, y=315)
-        adminpanel.message = tk.Label(admin, text="" ,bg="#00aeff" ,fg="black"  ,width=100,height=1, activebackground = "yellow" ,font=('times', 16, ' bold '))
+        adminpanel.message = tk.Label(admin, text="" ,bg="#00aeff" ,fg="black"  ,width=80,height=1, activebackground = "yellow" ,font=('times', 16, ' bold '))
         adminpanel.message.place(x=0, y=500)
-        adminpanel.message1 = tk.Label(admin, text="" ,bg="#00aeff" ,fg="black"  ,width=100,height=1, activebackground = "yellow" ,font=('times', 16, ' bold '))
+        adminpanel.message1 = tk.Label(admin, text="" ,bg="#00aeff" ,fg="black"  ,width=80,height=1, activebackground = "yellow" ,font=('times', 16, ' bold '))
         adminpanel.message1.place(x=0, y=550)
         admin.mainloop()
     else:
@@ -236,7 +239,7 @@ def facultypanel():
         tknewregistrationbtn.place(x=450, y=315)
         tkeditbtn = tk.Button(admin, text="Edit Attendence",command=EditAttendance,fg="black"  ,bg="#ea2a2a"  ,width=14 ,activebackground = "white" ,font=('times', 11, ' bold '))
         tkeditbtn.place(x=610, y=315)
-        tkpostbtn = tk.Button(admin, text="Post Attendence",command=TrackImages,fg="black"  ,bg="#ea2a2a"  ,width=14 ,activebackground = "white" ,font=('times', 11, ' bold '))
+        tkpostbtn = tk.Button(admin, text="Post Attendence",command=postattd,fg="black"  ,bg="#ea2a2a"  ,width=14 ,activebackground = "white" ,font=('times', 11, ' bold '))
         tkpostbtn.place(x=770, y=315)
         facultypanel.fperror = tk.Label(admin, text="",bg="white", width=80, fg="red",  height=1, font=('times', 15, ' bold '))
         facultypanel.fperror.place(x=0, y=515)
@@ -248,12 +251,35 @@ def EditAttendance():
     if(facultypanel.tkslot.get()==""):
         facultypanel.fperror.config(text="Enter Slot!")
     else:
-        attexists = os.path.isfile("C:\\xampp\\htdocs\\attend - Copy\\Attendance\\Attendance_"+facultypanel.facultyid+"_"+facultypanel.tkslot.get()+"_"+"12-11-2021"+".csv")
+        from datetime import date
+        today = date.today()
+        d1 = today.strftime("%d%m%Y")
+        attexists = os.path.isfile("C:\\xampp\\htdocs\\attend - Copy\\Attendance\\Attendance_"+facultypanel.facultyid+"_"+facultypanel.tkslot.get()+"_"+d1+".csv")
         if(attexists):
-         os.startfile("C:\\xampp\\htdocs\\attend - Copy\\Attendance\\Attendance_"+facultypanel.facultyid+"_"+facultypanel.tkslot.get()+"_"+"12-11-2021"+".csv")
+         os.startfile("C:\\xampp\\htdocs\\attend - Copy\\Attendance\\Attendance_"+facultypanel.facultyid+"_"+facultypanel.tkslot.get()+"_"+d1+".csv")
          facultypanel.fperror.config(text="")
         else:
             facultypanel.fperror.config(text="Slot Not Found!")
+
+
+def postattd():
+    import csv
+    import MySQLdb
+
+    mydb = MySQLdb.connect(host='localhost',user='root',passwd='',db='capstoneatd')
+    cursor = mydb.cursor()
+
+    
+    tbname="Attendance_"+facultypanel.facultyid+"_"+facultypanel.tkslot.get()+"_"+"14112021"
+    cursor.execute("Create table "+tbname+" (id varchar(255),date varchar(255),time varchar(255));")
+    csv_data = csv.reader(open("C:\\xampp\\htdocs\\attend - Copy\\Attendance\\"+tbname+".csv"))
+    for row in csv_data:
+        print(row)
+        print(row[0]+row[1]+row[2])
+        cursor.execute('INSERT INTO '+tbname+'(id,date,time) VALUES(%s, %s, %s)', row)
+    mydb.commit()
+    cursor.close()
+    print ("Done")
 def TrackImages():
     if(facultypanel.tkslot.get()==""):
         facultypanel.fperror.config(text="Enter Slot!")
@@ -300,6 +326,7 @@ def TrackImages():
                 if (conf < 50):
                     ts = time.time()
                     date = datetime.datetime.fromtimestamp(ts).strftime('%d-%m-%Y')
+                    date1 = datetime.datetime.fromtimestamp(ts).strftime('%d%m%Y')
                     timeStamp = datetime.datetime.fromtimestamp(ts).strftime('%H:%M:%S')
                     #aa = df.loc[df['SERIAL NO.'] == serial]['NAME'].values
                     ID = df.loc[df['Student ID'] == serial].values
@@ -310,14 +337,14 @@ def TrackImages():
                         attendance = [str(ID), str(date), str(timeStamp)]
                         ts = time.time()
                         date = datetime.datetime.fromtimestamp(ts).strftime('%d-%m-%Y')
-                        exists = os.path.isfile("Attendance\Attendance_"+facultypanel.facultyid+"_"+facultypanel.tkslot.get()+"_"+ date + ".csv")
+                        exists = os.path.isfile("Attendance\Attendance_"+facultypanel.facultyid+"_"+facultypanel.tkslot.get()+"_"+ date1 + ".csv")
                         if exists:
-                            with open("Attendance\Attendance_"+facultypanel.facultyid+"_"+facultypanel.tkslot.get()+"_"+ date + ".csv", 'a+') as csvFile1:
+                            with open("Attendance\Attendance_"+facultypanel.facultyid+"_"+facultypanel.tkslot.get()+"_"+ date1 + ".csv", 'a+',newline='') as csvFile1:
                                 writer = csv.writer(csvFile1)
                                 writer.writerow(attendance)
                             csvFile1.close()
                         else:
-                            with open("Attendance\Attendance_"+facultypanel.facultyid+"_"+facultypanel.tkslot.get()+"_"+ date + ".csv", 'a+') as csvFile1:
+                            with open("Attendance\Attendance_"+facultypanel.facultyid+"_"+facultypanel.tkslot.get()+"_"+ date1 + ".csv", 'a+',newline='') as csvFile1:
                                 writer = csv.writer(csvFile1)
                                 writer.writerow(col_names)
                                 writer.writerow(attendance)
@@ -329,13 +356,13 @@ def TrackImages():
             if (cv2.waitKey(1) == ord('q')):
                 break
         
-        with open("Attendance\Attendance_"+facultypanel.facultyid+"_"+facultypanel.tkslot.get()+"_"+ date + ".csv", 'r') as csvFile1:
+        with open("Attendance\Attendance_"+facultypanel.facultyid+"_"+facultypanel.tkslot.get()+"_"+ date1 + ".csv", 'r') as csvFile1:
             reader1 = csv.reader(csvFile1)
             for lines in reader1:
                 print(lines)
                 i = i + 1
-                if (i > 1):
-                    if (i % 2 != 0):
+                if (i > 0):
+                    if (i % 2 == 0):
                         iidd = str(lines[0]) + '   '
                         facultypanel.tv.insert('', 0, text=iidd, values=( str(lines[1]), str(lines[2])))
         csvFile1.close()
