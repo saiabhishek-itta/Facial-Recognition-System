@@ -89,7 +89,7 @@ def TrainImages():
     recognizer.save("TrainingImageLabel\Trainner.yml")
     res = "Profile Saved Successfully"
     adminpanel.message1.configure(text=res)
-    adminpanel.message.configure(text='Total Registrations till now  : ' + str(ID[-1]))
+    #adminpanel.message.configure(text='Total Registrations till now  : ' + str(ID[-1]))
 
 
 
@@ -148,7 +148,7 @@ def adminpanel():
     if(tkpassword.get()=="" or tkusername.get()=="" ):
         tklblerror.config(text="Enter Credentials!")
         print("Admin Credentials not entered to login")
-    elif(tkpassword.get()=="a" and tkusername.get()=="a"):
+    elif(tkpassword.get()=="adm" and tkusername.get()=="adm"):
         window.destroy()
         admin=tk.Tk()
         admin.geometry("950x620")
@@ -209,7 +209,7 @@ def facultypanel():
     if(tkpassword.get()=="" or tkusername.get()=="" ):
         tklblerror.config(text="Enter Credentials!")
         print("Faculty Credentials not entered to login")
-    elif(tkpassword.get()=="f" and tkusername.get()=="f"):
+    elif(tkpassword.get()=="fac" and tkusername.get()=="fac"):
         facultypanel.facultyid=tkusername.get()
         window.destroy()
         admin=tk.Tk()
@@ -268,9 +268,10 @@ def postattd():
 
     mydb = MySQLdb.connect(host='localhost',user='root',passwd='',db='capstoneatd')
     cursor = mydb.cursor()
-
-    
-    tbname="Attendance_"+facultypanel.facultyid+"_"+facultypanel.tkslot.get()+"_"+"14112021"
+    from datetime import date
+    today = date.today()
+    d1 = today.strftime("%d%m%Y")
+    tbname="Attendance_"+facultypanel.facultyid+"_"+facultypanel.tkslot.get()+"_"+d1
     cursor.execute("Create table "+tbname+" (id varchar(255),date varchar(255),time varchar(255));")
     csv_data = csv.reader(open("C:\\xampp\\htdocs\\attend - Copy\\Attendance\\"+tbname+".csv"))
     for row in csv_data:
