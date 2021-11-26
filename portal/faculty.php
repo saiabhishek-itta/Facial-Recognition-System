@@ -19,7 +19,7 @@ echo"home page ".$_SESSION["userid"]." ".$_SESSION['category'];
 
     <td>Slot</td>
 
-    <td>Delete</td>
+    <td>Action</td>
   </tr>
 
 <?php
@@ -35,8 +35,10 @@ while($data = mysqli_fetch_array($records))
     <td><?php echo $i++; ?></td>
 
     <td><?php echo $data['slot']; ?></td>    
-
+  
+ 
     <td><a href="fatdv.php?id=<?php echo $data['facid']."-".$data['slot']; ?>">Process</a></td>
+
   </tr>	
 <?php
 }

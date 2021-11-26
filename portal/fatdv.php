@@ -1,7 +1,14 @@
 <?php
-
+session_start();
+if(isset($_GET['id'])){
 $cred=explode("-",$_GET['id']);
-echo $cred[0]." ".$cred[1];
+$_SESSION['facid']=$cred[0];
+$_SESSION['slot']=$cred[1];}
+
+$date=0;
+if($_SERVER["REQUEST_METHOD"] == "POST"){
+  $date=$_POST['date'];
+}
 ?>
 
 
@@ -14,11 +21,8 @@ echo $cred[0]." ".$cred[1];
 </head>
 <body>
 
-
-
-
 <form action="fatdv.php" method="post">
-<h2><?php echo('Slot - '.$cred[1]." ");?>Attendence Details</h2>
+<h2><?php echo('Slot - '.$_SESSION['slot']." ");?>Attendence Details</h2>
 <label for="username">Choose Date :</label>
 		<input type="text" class="form-control" id="date"
 			name="date" aria-describedby="emailHelp" style="width:20%;">
@@ -41,9 +45,10 @@ echo $cred[0]." ".$cred[1];
 
 <?php
 
-include "dbconnect.php"; // Using database connection file here
+include "dbconnect.php";
+$facid=$_SESSION['facid'];$slot=$_SESSION['slot'];
 
-$records = mysqli_query($conn,"select * from atd where facid='$cred[0]' and slot='$cred[1]'"); // fetch data from database
+$records = mysqli_query($conn,"select * from atd where facid='$facid' and slot='$slot' and date='$date'"); 
 $i=1;
 while($data = mysqli_fetch_array($records))
 {
@@ -60,7 +65,7 @@ while($data = mysqli_fetch_array($records))
 <?php
 }
 ?>
-</table>
-
+</table><br><br>
+<a href="faculty.php">Back</a>
 </body>
 </html>
