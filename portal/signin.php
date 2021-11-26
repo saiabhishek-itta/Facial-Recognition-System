@@ -45,7 +45,12 @@ if($num>0)
 	$_SESSION['userid']=$username;
 	$_SESSION['category']=$category;
 	$_SESSION['password']=$password;
-    header("Location: http://localhost/attend%20-%20Copy/portal/home.php", true, 301);
+	if($category=='admin')
+    header("Location: http://localhost/attend%20-%20Copy/portal/admin.php", true, 301);
+	if($category=='faculty')
+    header("Location: http://localhost/attend%20-%20Copy/portal/faculty.php", true, 301);
+	if($category=='student')
+    header("Location: http://localhost/attend%20-%20Copy/portal/student.php", true, 301);
     exit();
 }
 	
