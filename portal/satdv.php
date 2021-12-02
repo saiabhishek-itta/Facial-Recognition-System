@@ -22,6 +22,9 @@ $_SESSION['slot']=$cred[1];}
 
 
 
+
+
+
 <br>
 <table border="2">
   <tr>
@@ -52,5 +55,14 @@ while($data = mysqli_fetch_array($records))
 ?>
 </table><br><br>
 <a href="student.php">Back</a>
+
+
+
+
+
+
+
+
+
 </body>
 </html>
