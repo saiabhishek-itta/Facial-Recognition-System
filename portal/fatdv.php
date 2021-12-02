@@ -1,5 +1,7 @@
 <?php
 session_start();
+if(!isset($_SESSION["userid"]))
+header("Location: http://localhost/attend%20-%20Copy/portal/signin.php", true, 301);
 if(isset($_GET['id'])){
 $cred=explode("-",$_GET['id']);
 $_SESSION['facid']=$cred[0];
@@ -35,7 +37,45 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
 <html>
 <head>
   <title>Faculty</title>
+  <style>
+table {
+  border-collapse: collapse;
+  width: 60%;
+  padding: 10%;
+}
+
+th, td {
+  text-align: left;
+  padding: 8px;
+}
+
+tr:nth-child(even){background-color: #f2f2f2}
+
+th {
+  background-color: #157DEC;
+  color: white;
+}
+
+#head{
+  background-color: red;
+}
+
+  </style>
+  <meta charset="utf-8">
+	<meta name="viewport" content=
+		"width=device-width, initial-scale=1,
+		shrink-to-fit=no">
+	<link rel="stylesheet" href=
+"https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css"
+		integrity=
+"sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk"
+		crossorigin="anonymous">
 </head>
+
+<div id="head">
+  <a style{align:left;} href="logout.php">Logout</a>
+</div>
+
 <body>
 
 <form action="fatdv.php" method="post">
@@ -49,17 +89,17 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
         <input type="submit" name="addbtn" value="Add Record" class="btn btn-primary">
  
 </form>
-
+<center>
 <br>
 <table border="2">
   <tr>
-    <td>Sr.No.</td>
+    <th>Sr.No.</td>
 
-    <td>Student ID</td>
-    <td>Date</td>
-    <td>Time</td>
+    <th>Student ID</td>
+    <th>Date</td>
+    <th>Time</td>
 
-    <td>Action</td>
+    <th>Action</td>
   </tr>
 
 <?php
