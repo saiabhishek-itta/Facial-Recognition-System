@@ -148,7 +148,17 @@ def adminpanel():
     if(tkpassword.get()=="" or tkusername.get()=="" ):
         tklblerror.config(text="Enter Credentials!")
         print("Admin Credentials not entered to login")
-    elif(tkpassword.get()=="adm" and tkusername.get()=="adm"):
+
+    import mysql.connector
+    mydb = MySQLdb.connect(host='localhost',user='root',passwd='',db='capstoneatd')
+    mycursor = mydb.cursor()
+    mycursor.execute("SELECT * FROM adminlogin where dbadminid='"+tkusername.get()+"' and dbadmpassword='"+tkpassword.get()+"'")
+    myresult = mycursor.fetchall()
+    y=0
+    for x in myresult:
+       y=y+1
+
+    if(y==1):
         window.destroy()
         admin=tk.Tk()
         admin.geometry("950x620")
@@ -209,7 +219,18 @@ def facultypanel():
     if(tkpassword.get()=="" or tkusername.get()=="" ):
         tklblerror.config(text="Enter Credentials!")
         print("Faculty Credentials not entered to login")
-    elif(tkpassword.get()=="fac" and tkusername.get()=="fac"):
+        return
+
+    import mysql.connector
+    mydb = MySQLdb.connect(host='localhost',user='root',passwd='',db='capstoneatd')
+    mycursor = mydb.cursor()
+    mycursor.execute("SELECT * FROM facultylogin where dbfacultyid='"+tkusername.get()+"' and dbfacpassword='"+tkpassword.get()+"'")
+    myresult = mycursor.fetchall()
+    y=0
+    for x in myresult:
+       y=y+1
+
+    if(y==1):
         facultypanel.facultyid=tkusername.get()
         window.destroy()
         admin=tk.Tk()
