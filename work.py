@@ -293,12 +293,14 @@ def postattd():
     today = date.today()
     d1 = today.strftime("%d%m%Y")
     tbname="Attendance_"+facultypanel.facultyid+"_"+facultypanel.tkslot.get()+"_"+d1
-    cursor.execute("Create table "+tbname+" (id varchar(255),date varchar(255),time varchar(255));")
+    #cursor.execute("Create table "+tbname+" (id varchar(255),date varchar(255),time varchar(255));")
     csv_data = csv.reader(open("C:\\xampp\\htdocs\\attend - Copy\\Attendance\\"+tbname+".csv"))
     for row in csv_data:
         print(row)
         print(row[0]+row[1]+row[2])
-        cursor.execute('INSERT INTO '+tbname+'(id,date,time) VALUES(%s, %s, %s)', row)
+        print("INSERT INTO atd (facid,slot,stdid,date,time) VALUES('"+facultypanel.facultyid+"',"+facultypanel.tkslot.get()+",%s, %s, %s)")
+        if(row[0]!='Id'):
+         cursor.execute("INSERT INTO atd (facid,slot,stdid,date,time) VALUES('"+facultypanel.facultyid+"','"+facultypanel.tkslot.get()+"',%s, %s, %s)", row)
     mydb.commit()
     cursor.close()
     print ("Done")
