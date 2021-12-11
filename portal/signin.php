@@ -139,8 +139,8 @@ if($num>0)
 	
 		<div class="form-group">
 			<label for="category">Login As :</label><br>
-			<input type="radio" id="category1" name="category" value="admin">
-			<label for="category1">Admin&nbsp&nbsp</label>
+			<!--<input type="radio" id="category1" name="category" value="admin">
+			<label for="category1">Admin&nbsp&nbsp</label>-->
 			<input type="radio" id="category2" name="category" value="faculty">
 			<label for="category2">Faculty&nbsp&nbsp</label>
 			<input type="radio" id="category3" name="category" value="student">

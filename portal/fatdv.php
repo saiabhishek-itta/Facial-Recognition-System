@@ -11,13 +11,18 @@ $date=0;
 if($_SERVER["REQUEST_METHOD"] == "POST"){
 
 
-  if(isset($_POST['viewbtn']))
+  if(isset($_POST['viewbtn'])){
   $date=$_POST['date'];
+  $cred=explode("-",$date);
+  $date=$cred[2]."-".$cred[1]."-".$cred[0];}
 
-  if(isset($_POST['addbtn'])){
+
+  if(isset($_POST['addbtn']) && isset($_POST['date']) ){
     include "dbconnect.php";
   $facid=$_SESSION['facid'];$slot=$_SESSION['slot'];
   $date=$_POST['date'];$stdid=$_POST['stdid'];
+  $cred=explode("-",$date);
+  $date=$cred[2]."-".$cred[1]."-".$cred[0];
 
   $sql = "INSERT INTO atd (facid, slot, stdid,date,time)
             VALUES ('$facid', '$slot', '$stdid','$date','-')";
@@ -59,6 +64,10 @@ th {
 #head{
   background-color: red;
 }
+#formid{
+  
+  padding:20px;
+}
 
   </style>
   <meta charset="utf-8">
@@ -77,18 +86,19 @@ th {
 </div>
 
 <body>
-
+<div id='formid'>
 <form action="fatdv.php" method="post">
 <h2><?php echo('Slot - '.$_SESSION['slot']." ");?>Attendence Details</h2>
 
 <label for="username">Choose Date :</label>
-		<input type="text" class="form-control" id="date"name="date">
+		<input type="date" class="form-control" id="date"name="date" style="width:20%;"><br>
     <input type="submit" name="viewbtn" value="View Attendence" class="btn btn-primary"><br><br>
 <label for="username">Student ID &nbsp&nbsp :</label>
-    <input type="text" class="form-control" id="stdid"name="stdid">
+    <input type="text" class="form-control" id="stdid"name="stdid" style="width:20%;"><br>
         <input type="submit" name="addbtn" value="Add Record" class="btn btn-primary">
  
 </form>
+</div>
 <center>
 <br>
 <table border="2">

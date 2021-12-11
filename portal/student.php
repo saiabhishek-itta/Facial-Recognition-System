@@ -1,16 +1,65 @@
 
 <?php
 session_start();
-echo"home page ".$_SESSION["userid"]." ".$_SESSION['category'];
+if(!isset($_SESSION["userid"]))
+header("Location: http://localhost/attend%20-%20Copy/portal/signin.php", true, 301);
+echo"Logged in ".$_SESSION["userid"];
 ?>
 
 <!DOCTYPE html>
 <html>
+
+
+
+<style>
+table {
+  border-collapse: collapse;
+  width: 60%;
+  padding: 10%;
+}
+
+th, td {
+  text-align: left;
+  padding: 8px;
+}
+
+tr:nth-child(even){background-color: #f2f2f2}
+
+th {
+  background-color: #157DEC;
+  color: white;
+}
+
+#head{
+  background-color: red;
+}
+#formid{
+  
+  padding:20px;
+}
+
+  </style>
+  <meta charset="utf-8">
+	<meta name="viewport" content=
+		"width=device-width, initial-scale=1,
+		shrink-to-fit=no">
+	<link rel="stylesheet" href=
+"https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css"
+		integrity=
+"sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk"
+		crossorigin="anonymous">
+
+
+
+
 <head>
   <title>Student</title>
 </head>
 <body>
-
+<div id="head">
+  <a style{align:left;} href="logout.php">Logout</a>
+</div>
+<center>
 <h2>Your Course Details</h2>
 
 <table border="2">
@@ -35,16 +84,12 @@ while($data = mysqli_fetch_array($records))
   $records1 = mysqli_query($conn,"select * from faculty_slot where classid='$clsid'");
 
   while($data1 = mysqli_fetch_array($records1)){
-
 ?>
   <tr>
     <td><?php echo $i++; ?></td>
-
-    <td><?php echo $data1['coursename']; ?></td>    
+    <td><?php echo $data1['coursename'];?></td>    
     <td><?php echo $data1['slot']; ?></td>
- 
     <td><a href="satdv.php?id=<?php echo $data1['facid']."-".$data1['slot']; ?>">View Attendance</a></td>
-
   </tr>	
 <?php
   }
@@ -58,7 +103,7 @@ while($data = mysqli_fetch_array($records))
 <canvas id="myChart" style="width:100%;max-width:600px"></canvas>
 
 <script>
-var xValues = ["Italy", "France", "Spain", "USA", "Argentina"];
+/*var xValues = ["Italy", "France", "Spain", "USA", "Argentina"];
 var yValues = [55, 49, 44, 24, 15];
 var barColors = ["red", "green","blue","orange","brown"];
 
@@ -78,7 +123,7 @@ new Chart("myChart", {
       text: "Attendence Percentage"
     }
   }
-});
+});*/
 </script>
 
 </body>

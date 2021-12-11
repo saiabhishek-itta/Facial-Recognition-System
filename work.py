@@ -256,6 +256,22 @@ def facultypanel():
         facultypanel.tkslot.place(x=600, y=173)
         facultypanel.slotlbl = tk.Label(admin, text="Enter Slot :",bg="white", width=10, fg="black",  height=1, font=('times', 15, ' bold '))
         facultypanel.slotlbl.place(x=450, y=173)
+        """
+        facultypanel.daylbl = tk.Label(admin, text="Day :",bg="white", width=5, fg="black",  height=1, font=('times', 15, ' bold '))
+        facultypanel.daylbl.place(x=450, y=223)
+        facultypanel.tkday = tk.Entry(admin,width=5 ,fg="black",font=('times', 15, ' bold ')  )
+        facultypanel.tkday.place(x=520, y=223)
+
+        facultypanel.monthlbl = tk.Label(admin, text="Month :",bg="white", width=5, fg="black",  height=1, font=('times', 15, ' bold '))
+        facultypanel.monthlbl.place(x=590, y=223)
+        facultypanel.tkmonth = tk.Entry(admin,width=5 ,fg="black",font=('times', 15, ' bold ')  )
+        facultypanel.tkmonth.place(x=660, y=223)
+
+        facultypanel.tkyear = tk.Entry(admin,width=5,height=1 ,fg="black",font=('times', 15, ' bold ')  )
+        facultypanel.tkyear.place(x=800, y=223)
+        facultypanel.yearlbl = tk.Label(admin, text="Year :",bg="white", width=5, fg="black",  height=1, font=('times', 15, ' bold '))
+        facultypanel.yearlbl.place(x=730, y=223)
+        """
         tknewregistrationbtn = tk.Button(admin, text="Take Attendence",command=TrackImages,fg="black"  ,bg="#ea2a2a"  ,width=14 ,activebackground = "white" ,font=('times', 11, ' bold '))
         tknewregistrationbtn.place(x=450, y=315)
         tkeditbtn = tk.Button(admin, text="Edit Attendence",command=EditAttendance,fg="black"  ,bg="#ea2a2a"  ,width=14 ,activebackground = "white" ,font=('times', 11, ' bold '))
@@ -264,6 +280,16 @@ def facultypanel():
         tkpostbtn.place(x=770, y=315)
         facultypanel.fperror = tk.Label(admin, text="",bg="white", width=80, fg="red",  height=1, font=('times', 15, ' bold '))
         facultypanel.fperror.place(x=0, y=515)
+        
+
+
+
+
+
+
+
+
+
         admin.mainloop()
     else:
         tklblerror.config(text="ID or Password not found for Faculty")
